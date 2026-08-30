@@ -7,13 +7,19 @@
 </head>
 <body>
 <?php
-if (session_status() === PHP_SESSION_NONE) session_start();
+session_start();
 require_once "config.php";
 require_once "auth.php";
 $user = current_user($conn);
 $cartCount = 0;
-$result = $conn->query("SELECT COALESCE(SUM(quantity),0) AS total FROM cart");
-if ($result) $cartCount = (int)$result->fetch_assoc()['total'];
+$sql = "SELECT SUM(quantity) AS total FROM cart";
+$result = $conn->query($sql);
+if ($result) {
+ $row = $result->fetch_assoc();
+if ($row['total'] != NULL) {
+  $cartCount = $row['total'];
+}
+}
 ?>
 <header>
 <div class="container navbar">
