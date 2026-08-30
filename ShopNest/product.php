@@ -35,26 +35,41 @@ if ($cartCount == NULL) {
 </div>
 <div class="actions">
 <a class="cart-icon" href="cart.php">🛒 <small>(<?= $cartCount ?>)</small></a>
-<?php if ($user): ?>
-<a class="btn btn-outline">Hi, <?= htmlspecialchars($user['name']) ?></a>
-<a class="btn btn-outline" href="logout.php">Sign Out</a>
-<?php else: ?>
-<a class="btn btn-outline" href="signin.php">Sign In</a>
-<a class="btn btn-primary" href="signup.php">Sign Up</a>
-<?php endif; ?>
+<?php
+if ($user) {
+?>
+<a class="btn btn-outline">
+Hi, <?= htmlspecialchars($user['name']) ?>
+</a>
+<a class="btn btn-outline" href="logout.php">
+Sign Out
+</a>
+<?php
+} else {
+?>
+<a class="btn btn-outline" href="signin.php">
+Sign In
+</a>
+<a class="btn btn-primary" href="signup.php">
+Sign Up
+</a>
+<?php
+}
+?>
 </div>
-</div></header>
+</div>
+</header>
 <?php
 $id = 0;
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+$id = $_GET['id'];
 }
 $sql = "SELECT * FROM products WHERE id = $id";
 $result = $conn->query($sql);
 $p = $result->fetch_assoc();
 if (!$p) {
-    header("Location: index.php");
-    exit();
+header("Location: index.php");
+exit();
 }
 ?>
 <main class="container product-detail">
