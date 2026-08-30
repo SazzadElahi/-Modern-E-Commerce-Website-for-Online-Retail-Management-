@@ -5,14 +5,21 @@
 <title>ShopNest</title>
 <link rel="stylesheet" href="style.css">
 </head>
-<body><?php
-if (session_status() === PHP_SESSION_NONE) session_start();
+<body>
+<?php
+session_start();
 require_once "config.php";
 require_once "auth.php";
 $user = current_user($conn);
 $cartCount = 0;
-$result = $conn->query("SELECT COALESCE(SUM(quantity),0) AS total FROM cart");
-if ($result) $cartCount = (int)$result->fetch_assoc()['total'];
+$result = $conn->query("SELECT SUM(quantity) AS total FROM cart");
+if ($result) {
+$row = $result->fetch_assoc();
+$cartCount = $row['total'];
+if ($cartCount == NULL) {
+        $cartCount = 0;
+}
+}
 ?>
 <header>
 <div class="container navbar">
