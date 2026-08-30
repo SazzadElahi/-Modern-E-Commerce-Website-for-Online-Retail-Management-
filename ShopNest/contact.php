@@ -32,13 +32,27 @@ if ($result) {
 </div>
 <div class="actions">
 <a class="cart-icon" href="cart.php">🛒 <small>(<?= $cartCount ?>)</small></a>
-<?php if ($user): ?>
-<a class="btn btn-outline">Hi, <?= htmlspecialchars($user['name']) ?></a>
-<a class="btn btn-outline" href="logout.php">Sign Out</a>
-<?php else: ?>
-<a class="btn btn-outline" href="signin.php">Sign In</a>
-<a class="btn btn-primary" href="signup.php">Sign Up</a>
-<?php endif; ?>
+<?php
+if ($user) {
+?>
+<a class="btn btn-outline">
+ Hi, <?= htmlspecialchars($user['name']) ?>
+</a>
+<a class="btn btn-outline" href="logout.php">
+Sign Out
+</a>
+<?php
+} else {
+?>
+<a class="btn btn-outline" href="signin.php">
+    Sign In
+</a>
+<a class="btn btn-primary" href="signup.php">
+Sign Up
+</a>
+<?php
+}
+?>
 </div>
 </div>
 </header>
@@ -52,37 +66,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $message = $_POST["message"];
 if ($name != "" && $email != "" && $subject != "" && $message != "") {
 $sql = "INSERT INTO contacts (name, email, subject, message)
-     VALUES ('$name', '$email', '$subject', '$message')";
+VALUES ('$name', '$email', '$subject', '$message')";
 $result = $conn->query($sql);
 if ($result) {
 $messageSent = true;
- } 
- else {
- $error = "Could not save your message.";
-     }
-    }
+} 
+else {
+$error = "Could not save your message.";
+}
+} 
 else {
 $error = "Please fill all fields.";
-    }
+}
 }
 ?>
 <main>
 <section class="page-head container">
 <span class="badge">Get In Touch</span>
 <h1>Contact Us</h1>
-<p>Send us a message — it will be saved in the MySQL database.</p>
+ <p>
+ Send us a message — it will be saved in the MySQL database.
+</p>
 </section>
 <section class="container contact-grid">
 <div class="panel">
-<h2>Send us a message</h2>
-<p>Fill out the form below and we'll get back to you.</p>
-<?php if($messageSent): ?>
-<p style="background:#eaf8ee;padding:12px;border-radius:10px;margin-bottom:15px">✓ Your message was submitted successfully.
-</p>
-<?php elseif($error): ?>
-<p style="background:#fff0f0;padding:12px;border-radius:10px;margin-bottom:15px"><?= htmlspecialchars($error) ?>
-</p>
-<?php endif; ?>
+ <h2>Send us a message</h2>
+ <p>
+ Fill out the form below and we'll get back to you.
+ </p>
+
+<?php
+
+if ($messageSent) {
+?>
+
+    <p style="background:#eaf8ee;padding:12px;border-radius:10px;margin-bottom:15px">
+        ✓ Your message was submitted successfully.
+    </p>
+
+<?php
+}
+
+if ($error != "") {
+?>
+
+    <p style="background:#fff0f0;padding:12px;border-radius:10px;margin-bottom:15px">
+        <?= htmlspecialchars($error) ?>
+    </p>
+
+<?php
+}
+
+?>
 <form method="post">
 <div class="form-grid">
 <div class="field">
