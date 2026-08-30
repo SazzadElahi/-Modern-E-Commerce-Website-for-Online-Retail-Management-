@@ -1,25 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
-/* Main colors */
 :root {
-    --primary: #3a07f1;
-    --text: #171717;
-    --muted: #4f7cd6;
-    --border: #b8d8f0;
-    --background: white;
-    --light: #f7f7f7;
+--primary: #3a07f1;
+--text: #171717;
+--muted: #4f7cd6;
+--border: #b8d8f0;
+--background: white;
+--light: #f7f7f7;
 }
-
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
-
 html {
     scroll-behavior: smooth;
 }
-
 body {
     font-family: Arial, sans-serif;
     color: var(--text);
@@ -31,20 +26,15 @@ a {
     text-decoration: none;
     color: inherit;
 }
-
 img {
     display: block;
     width: 100%;
 }
-
 .container {
     width: 92%;
     max-width: 1180px;
     margin: auto;
 }
-
-
-
 header {
     position: sticky;
     top: 0;
@@ -129,7 +119,6 @@ header {
     font-weight: bold;
     cursor: pointer;
 }
-
 .btn-primary {
     border: 1px solid #b8d8f0;
     background: var(--primary);
@@ -250,9 +239,6 @@ header {
     font-weight: bold;
     color: #555;
 }
-
-
-
 footer {
     border-top: 1px solid #b8d8f0;
     background: white;
@@ -337,9 +323,6 @@ footer {
     color: var(--muted);
     font-size: 13px;
 }
-
-
-
 .page-head {
     text-align: center;
     padding: 55px 0 30px;
@@ -349,11 +332,9 @@ footer {
     font-size: 42px;
     margin-bottom: 8px;
 }
-
 .page-head p {
     color: var(--muted);
 }
-
 .contact-grid {
     display: grid;
     grid-template-columns: 1.4fr 0.8fr;
@@ -438,9 +419,6 @@ footer {
     font-size: 13px;
     color: var(--muted);
 }
-
-
-
 .faq {
     background: #fafafa;
     padding: 65px 0;
