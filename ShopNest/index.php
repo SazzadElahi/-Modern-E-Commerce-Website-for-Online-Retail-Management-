@@ -62,13 +62,13 @@ if (isset($_GET['search'])) {
  $search = $_GET['search'];
  $sql = "SELECT * FROM products 
  WHERE name LIKE '%$search%' 
-OR description LIKE '%$search%'
-ORDER BY id DESC";
-$products = $conn->query($sql);
+ OR description LIKE '%$search%'
+ ORDER BY id DESC";
 } 
-else { $sql = "SELECT * FROM products ORDER BY id DESC";
-$products = $conn->query($sql);
+else {
+ $sql = "SELECT * FROM products ORDER BY id DESC";
 }
+$products = $conn->query($sql);
 while ($p = $products->fetch_assoc()):
 ?>
 <article class="card">
