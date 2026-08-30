@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 :root {
---primary: #3a07f1;
---text: #171717;
---muted: #4f7cd6;
---border: #b8d8f0;
---background: white;
---light: #f7f7f7;
+    --primary: #3a07f1;
+    --text: #171717;
+    --muted: #4f7cd6;
+    --border: #b8d8f0;
+    --background: white;
+    --light: #f7f7f7;
 }
 * {
     box-sizing: border-box;
@@ -21,7 +21,6 @@ body {
     background: var(--background);
     line-height: 1.6;
 }
-
 a {
     text-decoration: none;
     color: inherit;
@@ -35,6 +34,7 @@ img {
     max-width: 1180px;
     margin: auto;
 }
+
 header {
     position: sticky;
     top: 0;
@@ -76,7 +76,7 @@ header {
 }
 
 .nav-links a:hover {
-     background: #2e05c7;
+    background: #2e05c7;
     color: white;
 }
 
@@ -119,6 +119,7 @@ header {
     font-weight: bold;
     cursor: pointer;
 }
+
 .btn-primary {
     border: 1px solid #b8d8f0;
     background: var(--primary);
@@ -137,7 +138,6 @@ header {
 
 .btn-outline:hover {
     background: #2e05c7;
-    
 }
 
 .cart-icon {
@@ -149,9 +149,11 @@ header {
     font-size: 11px;
     color: white;
 }
+
 .actions small:hover {
     color: var(--primary);
 }
+
 .hero {
     text-align: center;
     padding: 70px 0 42px;
@@ -171,7 +173,6 @@ header {
     color: #000000;
 }
 
-
 .section-title {
     display: flex;
     justify-content: space-between;
@@ -185,11 +186,10 @@ header {
 
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 275px 275px 275px 275px;
     gap: 22px;
     padding-bottom: 80px;
 }
-
 
 .card {
     border: 1px solid #b8d8f0;
@@ -197,7 +197,6 @@ header {
     overflow: hidden;
     background: white;
 }
-
 
 .product-image {
     aspect-ratio: 1 / 1;
@@ -210,6 +209,7 @@ header {
     height: 100%;
     object-fit: cover;
 }
+
 .card-body {
     padding: 16px;
 }
@@ -229,7 +229,6 @@ header {
     width: 100%;
 }
 
-
 .badge {
     display: inline-block;
     padding: 6px 11px;
@@ -239,6 +238,7 @@ header {
     font-weight: bold;
     color: #555;
 }
+
 footer {
     border-top: 1px solid #b8d8f0;
     background: white;
@@ -276,7 +276,7 @@ footer {
 
 .footer-main {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 350px 170px 170px 170px 170px;
     gap: 35px;
     padding: 55px 0;
 }
@@ -323,6 +323,7 @@ footer {
     color: var(--muted);
     font-size: 13px;
 }
+
 .page-head {
     text-align: center;
     padding: 55px 0 30px;
@@ -332,12 +333,14 @@ footer {
     font-size: 42px;
     margin-bottom: 8px;
 }
+
 .page-head p {
     color: var(--muted);
 }
+
 .contact-grid {
     display: grid;
-    grid-template-columns: 1.4fr 0.8fr;
+    grid-template-columns: 730px 420px;
     gap: 28px;
     padding-bottom: 80px;
 }
@@ -358,10 +361,9 @@ footer {
     margin-bottom: 22px;
 }
 
-
 .form-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 330px 330px;
     gap: 16px;
 }
 
@@ -419,6 +421,7 @@ footer {
     font-size: 13px;
     color: var(--muted);
 }
+
 .faq {
     background: #fafafa;
     padding: 65px 0;
@@ -426,7 +429,7 @@ footer {
 
 .faq-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 410px 410px;
     gap: 18px;
     max-width: 850px;
     margin: auto;
@@ -449,10 +452,9 @@ footer {
     color: var(--muted);
 }
 
-
 .product-detail {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 540px 540px;
     gap: 55px;
     padding: 60px 0 90px;
 }
@@ -495,14 +497,17 @@ footer {
 .feature-list li {
     padding: 6px 0;
 }
+
 .cart-page {
     padding: 50px 0 90px;
 }
+
 .cart-layout {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 750px 380px;
     gap: 28px;
 }
+
 .cart-item {
     display: flex;
     gap: 18px;
@@ -536,6 +541,7 @@ footer {
 .cart-item input {
     margin-left: 5px;
 }
+
 .summary {
     border: 1px solid #b8d8f0;
     border-radius: 16px;
@@ -574,4 +580,3 @@ footer {
     color: var(--muted);
     margin-bottom: 20px;
 }
-
