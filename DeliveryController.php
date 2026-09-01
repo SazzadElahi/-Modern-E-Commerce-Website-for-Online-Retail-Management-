@@ -1,0 +1,2 @@
+<?php
+class DeliveryController extends BaseController { public function index(mysqli $db): void { require_role('delivery');$aid=(int)$_SESSION['agent_id'];$agent=Delivery::agent($db,$aid);$message='';if($_SERVER['REQUEST_METHOD']==='POST'){Delivery::update($db,(int)$_POST['delivery_id'],$agent['name'],$_POST['status'],($_POST['delivery_date']??'')?:null);$message='Delivery status updated.';}$d=$this->data($db);$d['agent']=$agent;$d['message']=$message;$d['deliveries']=Delivery::all($db);render('delivery/dashboard',$d);}}
