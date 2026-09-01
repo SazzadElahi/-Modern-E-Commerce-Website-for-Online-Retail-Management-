@@ -1,9 +1,62 @@
 <?php
-class Order {
-    public static function customerOrders(mysqli $db,int $customer): mysqli_result { $s=$db->prepare("SELECT orders.*,payments.method,payments.status payment_status,delivery.status delivery_status FROM orders LEFT JOIN payments ON payments.order_id=orders.id LEFT JOIN delivery ON delivery.order_id=orders.id WHERE orders.customer_id=? ORDER BY orders.id DESC");$s->bind_param("i",$customer);$s->execute();return $s->get_result(); }
-    public static function create(mysqli $db,int $customer,array $user,float $total,array $items,string $method): int { $db->begin_transaction(); try{$s=$db->prepare("INSERT INTO orders(customer_id,customer_name,customer_address,customer_phone,total,status) VALUES(?,?,?,?,?,'pending')");$s->bind_param("isssd",$customer,$user['name'],$user['address'],$user['phone'],$total);$s->execute();$id=$db->insert_id;$s=$db->prepare("INSERT INTO order_items(order_id,product_id,product_name,price,quantity) VALUES(?,?,?,?,?)");foreach($items as $i){$s->bind_param("iisdi",$id,$i['id'],$i['name'],$i['price'],$i['quantity']);$s->execute();$u=$db->prepare("UPDATE products SET stock=stock-? WHERE id=? AND stock>=?");$u->bind_param("iii",$i['quantity'],$i['id'],$i['quantity']);$u->execute();}$pstatus=$method==='Cash on Delivery'?'pending':'demo-paid';$s=$db->prepare("INSERT INTO payments(order_id,method,amount,status) VALUES(?,?,?,?)");$s->bind_param("isds",$id,$method,$total,$pstatus);$s->execute();$s=$db->prepare("INSERT INTO delivery(order_id,status) VALUES(?,'pending')");$s->bind_param("i",$id);$s->execute();$db->commit();return $id;}catch(Throwable $e){$db->rollback();throw $e;}}
-    public static function all(mysqli $db): mysqli_result { return $db->query("SELECT * FROM orders ORDER BY id DESC"); }
-    public static function updateStatus(mysqli $db,int $id,string $status): bool { $s=$db->prepare("UPDATE orders SET status=? WHERE id=?");$s->bind_param("si",$status,$id);return $s->execute(); }
-    public static function sellerOrders(mysqli $db,int $seller): mysqli_result { $s=$db->prepare("SELECT DISTINCT orders.id,orders.customer_name,orders.total,orders.status FROM orders JOIN order_items ON order_items.order_id=orders.id JOIN products ON products.id=order_items.product_id WHERE products.seller_id=? ORDER BY orders.id DESC");$s->bind_param("i",$seller);$s->execute();return $s->get_result(); }
-    public static function report(mysqli $db): array { return $db->query("SELECT COUNT(*) orders_count,COALESCE(SUM(total),0) sales FROM orders WHERE status<>'cancelled'")->fetch_assoc(); }
+class Order
+{
+    public static function customerOrders(mysqli $db, int $customer): mysqli_result
+    {
+        $s = $db->prepare("SELECT orders.*,payments.method,payments.status payment_status,delivery.status delivery_status FROM orders LEFT JOIN payments ON payments.order_id=orders.id LEFT JOIN delivery ON delivery.order_id=orders.id WHERE orders.customer_id=? ORDER BY orders.id DESC");
+        $s->bind_param("i", $customer);
+        $s->execute();
+        return $s->get_result();
+    }
+    public static function create(mysqli $db, int $customer, array $user, float $total, array $items, string $method): int
+    {
+        $db->begin_transaction();
+        try {
+            $s = $db->prepare("INSERT INTO orders(customer_id,customer_name,customer_address,customer_phone,total,status) VALUES(?,?,?,?,?,'pending')");
+            $s->bind_param("isssd", $customer, $user['name'], $user['address'], $user['phone'], $total);
+            $s->execute();
+            $id = $db->insert_id;
+            $s = $db->prepare("INSERT INTO order_items(order_id,product_id,product_name,price,quantity) VALUES(?,?,?,?,?)");
+            foreach ($items as $i) {
+                $s->bind_param("iisdi", $id, $i['id'], $i['name'], $i['price'], $i['quantity']);
+                $s->execute();
+                $u = $db->prepare("UPDATE products SET stock=stock-? WHERE id=? AND stock>=?");
+                $u->bind_param("iii", $i['quantity'], $i['id'], $i['quantity']);
+                $u->execute();
+            }
+            $pstatus = $method === 'Cash on Delivery' ? 'pending' : 'demo-paid';
+            $s = $db->prepare("INSERT INTO payments(order_id,method,amount,status) VALUES(?,?,?,?)");
+            $s->bind_param("isds", $id, $method, $total, $pstatus);
+            $s->execute();
+            $s = $db->prepare("INSERT INTO delivery(order_id,status) VALUES(?,'pending')");
+            $s->bind_param("i", $id);
+            $s->execute();
+            $db->commit();
+            return $id;
+        } catch (Throwable $e) {
+            $db->rollback();
+            throw $e;
+        }
+    }
+    public static function all(mysqli $db): mysqli_result
+    {
+        return $db->query("SELECT * FROM orders ORDER BY id DESC");
+    }
+    public static function updateStatus(mysqli $db, int $id, string $status): bool
+    {
+        $s = $db->prepare("UPDATE orders SET status=? WHERE id=?");
+        $s->bind_param("si", $status, $id);
+        return $s->execute();
+    }
+    public static function sellerOrders(mysqli $db, int $seller): mysqli_result
+    {
+        $s = $db->prepare("SELECT DISTINCT orders.id,orders.customer_name,orders.total,orders.status FROM orders JOIN order_items ON order_items.order_id=orders.id JOIN products ON products.id=order_items.product_id WHERE products.seller_id=? ORDER BY orders.id DESC");
+        $s->bind_param("i", $seller);
+        $s->execute();
+        return $s->get_result();
+    }
+    public static function report(mysqli $db): array
+    {
+        return $db->query("SELECT COUNT(*) orders_count,COALESCE(SUM(total),0) sales FROM orders WHERE status<>'cancelled'")->fetch_assoc();
+    }
 }
