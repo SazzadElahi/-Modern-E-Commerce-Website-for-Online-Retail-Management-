@@ -1,1 +1,2 @@
-<?php require __DIR__.'/app/bootstrap.php'; (new CartController())->index($conn);
+<?php require __DIR__.'/app/bootstrap.php';
+(new CartController())->index($conn);
