@@ -1,9 +1,68 @@
 <?php
-class Cart {
-    public static function count(mysqli $db,int $customer): int { $s=$db->prepare("SELECT COALESCE(SUM(quantity),0) total FROM cart WHERE customer_id=?"); $s->bind_param("i",$customer); $s->execute(); return (int)$s->get_result()->fetch_assoc()['total']; }
-    public static function add(mysqli $db,int $customer,int $product): void { $s=$db->prepare("SELECT stock FROM products WHERE id=?");$s->bind_param("i",$product);$s->execute();$p=$s->get_result()->fetch_assoc(); if(!$p||$p['stock']<=0)return; $s=$db->prepare("SELECT id,quantity FROM cart WHERE customer_id=? AND product_id=?");$s->bind_param("ii",$customer,$product);$s->execute();$e=$s->get_result()->fetch_assoc(); if($e){$q=min($e['quantity']+1,$p['stock']);$s=$db->prepare("UPDATE cart SET quantity=? WHERE id=? AND customer_id=?");$s->bind_param("iii",$q,$e['id'],$customer);}else{$s=$db->prepare("INSERT INTO cart(customer_id,product_id,quantity) VALUES(?,?,1)");$s->bind_param("ii",$customer,$product);} $s->execute(); }
-    public static function remove(mysqli $db,int $customer,int $id): void { $s=$db->prepare("DELETE FROM cart WHERE id=? AND customer_id=?");$s->bind_param("ii",$id,$customer);$s->execute(); }
-    public static function update(mysqli $db,int $customer,array $qtys): void { foreach($qtys as $id=>$qty){$id=(int)$id;$qty=max(1,(int)$qty);$s=$db->prepare("SELECT products.stock FROM cart JOIN products ON products.id=cart.product_id WHERE cart.id=? AND cart.customer_id=?");$s->bind_param("ii",$id,$customer);$s->execute();$r=$s->get_result()->fetch_assoc();if($r){$qty=min($qty,(int)$r['stock']);$s=$db->prepare("UPDATE cart SET quantity=? WHERE id=? AND customer_id=?");$s->bind_param("iii",$qty,$id,$customer);$s->execute();}} }
-    public static function items(mysqli $db,int $customer): mysqli_result { $s=$db->prepare("SELECT cart.id cart_id,cart.quantity,products.* FROM cart JOIN products ON products.id=cart.product_id WHERE cart.customer_id=?");$s->bind_param("i",$customer);$s->execute();return $s->get_result(); }
-    public static function clear(mysqli $db,int $customer): void { $s=$db->prepare("DELETE FROM cart WHERE customer_id=?");$s->bind_param("i",$customer);$s->execute(); }
+class Cart
+{
+    public static function count(mysqli $db, int $customer): int
+    {
+        $s = $db->prepare("SELECT COALESCE(SUM(quantity),0) total FROM cart WHERE customer_id=?");
+        $s->bind_param("i", $customer);
+        $s->execute();
+        return (int)$s->get_result()->fetch_assoc()['total'];
+    }
+    public static function add(mysqli $db, int $customer, int $product): void
+    {
+        $s = $db->prepare("SELECT stock FROM products WHERE id=?");
+        $s->bind_param("i", $product);
+        $s->execute();
+        $p = $s->get_result()->fetch_assoc();
+        if (!$p || $p['stock'] <= 0) return;
+        $s = $db->prepare("SELECT id,quantity FROM cart WHERE customer_id=? AND product_id=?");
+        $s->bind_param("ii", $customer, $product);
+        $s->execute();
+        $e = $s->get_result()->fetch_assoc();
+        if ($e) {
+            $q = min($e['quantity'] + 1, $p['stock']);
+            $s = $db->prepare("UPDATE cart SET quantity=? WHERE id=? AND customer_id=?");
+            $s->bind_param("iii", $q, $e['id'], $customer);
+        } else {
+            $s = $db->prepare("INSERT INTO cart(customer_id,product_id,quantity) VALUES(?,?,1)");
+            $s->bind_param("ii", $customer, $product);
+        }
+        $s->execute();
+    }
+    public static function remove(mysqli $db, int $customer, int $id): void
+    {
+        $s = $db->prepare("DELETE FROM cart WHERE id=? AND customer_id=?");
+        $s->bind_param("ii", $id, $customer);
+        $s->execute();
+    }
+    public static function update(mysqli $db, int $customer, array $qtys): void
+    {
+        foreach ($qtys as $id => $qty) {
+            $id = (int)$id;
+            $qty = max(1, (int)$qty);
+            $s = $db->prepare("SELECT products.stock FROM cart JOIN products ON products.id=cart.product_id WHERE cart.id=? AND cart.customer_id=?");
+            $s->bind_param("ii", $id, $customer);
+            $s->execute();
+            $r = $s->get_result()->fetch_assoc();
+            if ($r) {
+                $qty = min($qty, (int)$r['stock']);
+                $s = $db->prepare("UPDATE cart SET quantity=? WHERE id=? AND customer_id=?");
+                $s->bind_param("iii", $qty, $id, $customer);
+                $s->execute();
+            }
+        }
+    }
+    public static function items(mysqli $db, int $customer): mysqli_result
+    {
+        $s = $db->prepare("SELECT cart.id cart_id,cart.quantity,products.* FROM cart JOIN products ON products.id=cart.product_id WHERE cart.customer_id=?");
+        $s->bind_param("i", $customer);
+        $s->execute();
+        return $s->get_result();
+    }
+    public static function clear(mysqli $db, int $customer): void
+    {
+        $s = $db->prepare("DELETE FROM cart WHERE customer_id=?");
+        $s->bind_param("i", $customer);
+        $s->execute();
+    }
 }
